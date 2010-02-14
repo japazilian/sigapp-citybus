@@ -2,7 +2,6 @@ package citybus.datamanager;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import android.content.Context;
 
@@ -25,7 +24,6 @@ public class DataManager {
 	public static final int ROSS_ADE = 5;
 	public static final int NIGHT_RIDER = 6;
 	public static final int SOUTH_CAMPUS_AV_TECH = 7;
-
 	private static ArrayList<ArrayList<BusStopGeoInfo>> loops = null;
 
 	/**
@@ -38,18 +36,43 @@ public class DataManager {
 	 * @param routineId
 	 *            Routine's ID
 	 * @param currentTime
-	 *            currentTime
-	 * @return List of BusStopInfo
+	 *            specify time, all bus comes after this point
+	 * @return ArrayList of BusStopInfo
 	 */
-	public static List<BusStopGeoTimeInfo> getRoutineInfoById(Context ctx,
-			int routineId, Date currentTime) {
-		if (currentTime == null) {
+	public static ArrayList<BusStopGeoTimeInfo> getRoutineInfoById(Context ctx,
+			int routineId, Date currentTime) throws Exception {
+		if (currentTime == null || routineId >= TOTAL_LOOP_COUNT) {
 			return null;
 		}
 		if (loops == null) {
 			initRoutines(ctx);
 		}
-		return null;
+
+		throw new Exception("Not Implemented yet.");
+	}
+
+	/**
+	 * Gets all immediate incoming buses at specified bus stop after specified
+	 * time
+	 * 
+	 * @param ctx
+	 *            Context
+	 * @param busStopId
+	 *            Bus Stop's Id, as defined in DBConstants
+	 * @param currentTime
+	 *            specify time, all buses comes after this point
+	 * @author zhang42
+	 * @return
+	 */
+	public static ArrayList<BusNextComingInfo> getNextComingBusInfoByLocation(
+			Context ctx, int busStopId, Date currentTime) throws Exception {
+		if (ctx == null || currentTime == null || busStopId < 0
+				|| busStopId >= DBConstants.BusStopNames.length)
+			return null;
+		if (loops == null) {
+			initRoutines(ctx);
+		}
+		throw new Exception("Not Implemented yet.");
 	}
 
 	/**
