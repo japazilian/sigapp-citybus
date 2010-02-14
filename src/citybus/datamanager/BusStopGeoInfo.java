@@ -20,8 +20,8 @@ public class BusStopGeoInfo {
 	 * @param latitude
 	 * @param longitude
 	 * @param altitude
-	 * @param name
-	 *            bus stop name
+	 * @param index
+	 *            bus stop name's index, see DBConstants.routineIndex
 	 * @author zhang42
 	 */
 	public BusStopGeoInfo(float latitude, float longitude, float altitude,

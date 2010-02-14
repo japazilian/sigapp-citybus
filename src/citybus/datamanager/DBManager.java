@@ -16,6 +16,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBManager extends SQLiteOpenHelper {
 
+	/*
+	 * table format: bus routine id, latitude, longitude, alitude, stopname
+	 */
 	private final static String CreateTable_BusStop_GeoInfo = "CREATE TABLE "
 			+ DBConstants.BusStopTable + "(" + DBConstants.BusRoutineId
 			+ " INTEGER," + DBConstants.LATITUDE + " REAL,"
@@ -42,9 +45,14 @@ public class DBManager extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + DBConstants.BusStopTable);
 	}
 
+	/**
+	 * Populate all entries to db
+	 * 
+	 * @param db
+	 */
 	private void populateEntries(SQLiteDatabase db) {
 		for (int i = 0; i < DataManager.TOTAL_LOOP_COUNT; i++) {
-			int[] busRoutine = DBConstants.loopsIndex[i];
+			int[] busRoutine = DBConstants.RoutineIndex[i];
 			int busRountineStop = busRoutine.length;
 			for (int j = 0; j < busRountineStop; j++) {
 				ContentValues values = new ContentValues();
@@ -61,6 +69,13 @@ public class DBManager extends SQLiteOpenHelper {
 		}
 	}
 
+	/**
+	 * Gets all bus stop geogrphical information from db
+	 * 
+	 * @param routineId
+	 *            bus routines's id as specified in <b>DataManager</b>
+	 * @return
+	 */
 	public ArrayList<BusStopGeoInfo> getBusStopsByRoutine(int routineId) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.query(DBConstants.BusStopTable, null,
