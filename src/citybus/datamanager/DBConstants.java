@@ -66,7 +66,7 @@ public class DBConstants {
 
 	// do not reorder, make sure no duplicate
 	public final static String[] BusStopNames = new String[] {
-			"Nimitz & Marshall", "Third & University", "Northwestern & State",
+			"Nimitz & Marshall", "3rd & University", "Northwestern & State",
 			"University Hall", "Discovery Park Lot", "1st & MacArthur",
 			"Intramural & Stadium", "EE", "Class of 1950", "Tower Acres",
 			"Physics", "STEW", "South Lot", "McCutcheon at Purdue West",
@@ -74,13 +74,12 @@ public class DBConstants {
 			"Canal & 9th", "4th & Brown", "Ross Ade", "Beering Hall",
 			"Lilly Hall", "Wabash Landing", "7th & Main", "Airport" };
 
-	// TODO fill in this, order should match BusStopNames, keep number type in
+	// fill in this, order should match BusStopNames, keep number type in
 	// float, double might break database
 	public final static float[][] BusGpsInfo = new float[][] {
-			{ 0.1f, 0.2f, 0.3f }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
-			{ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
-			{ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
-			{ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
-			{ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
-			{ 0, 0, 0 } };
+			{ 40.421860f, -86.927363f, 0 }, { 40.427263f, -86.916651f, 0 }, { 40.423998f, -86.908022f, 0 }, { 40.424270f, -86.914912f, 0 },	{ 40.419212f, -86.924743f, 0 }, 
+			{ 40.425325f, -86.925773f, 0 }, { 40.431465f, -86.921554f, 0 }, { 40.428758f, -86.911350f, 0 }, { 40.429536f, -86.914756f, 0 }, { 40.434923f, -86.925159f, 0 }, 
+			{ 40.430342f, -86.913030f, 0 }, { 40.425091f, -86.913679f, 0 }, { 40.420858f, -86.923257f, 0 }, { 40.424833f, -86.928914f, 0 }, { 40.435487f, -86.924783f, 0 }, 
+			{ 40.424086f, -86.911098f, 0 },	{ 40.433276f, -86.923268f, 0 }, { 40.434393f, -86.886948f, 0 }, { 40.421811f, -86.893090f, 0 }, { 40.435948f, -86.918869f, 0 }, 
+			{ 40.425560f, -86.916616f, 0 },	{ 40.424047f, -86.917353f, 0 }, { 40.422032f, -86.900981f, 0 }, { 40.419108f, -86.888686f, 0 }, { 40.416714f, -86.930485f, 0 }};
 }
