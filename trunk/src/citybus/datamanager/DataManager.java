@@ -1,7 +1,11 @@
 package citybus.datamanager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+
+import citybus.datamanager.ruleunits.RuleParser;
+import citybus.datamanager.ruleunits.RuleUnit;
 
 import android.content.Context;
 
@@ -40,15 +44,15 @@ public class DataManager {
 	 * @return ArrayList of BusStopInfo
 	 */
 	public static ArrayList<BusStopGeoTimeInfo> getRoutineInfoById(Context ctx,
-			int routineId, Date currentTime) throws Exception {
+			int routineId, Time currentTime) {
 		if (currentTime == null || routineId >= TOTAL_LOOP_COUNT) {
 			return null;
 		}
 		if (loops == null) {
 			initRoutines(ctx);
 		}
-
-		throw new Exception("Not Implemented yet.");
+		RuleUnit rule = RuleParser.getRoutineRule(routineId, currentTime.day);
+		return rule.getCompleteRoutineInfo(currentTime);
 	}
 
 	/**
