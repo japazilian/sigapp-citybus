@@ -10,15 +10,17 @@ import org.openintents.intents.WikitudePOI;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import citybus.datamanager.BusStopGeoTimeInfo;
 import citybus.datamanager.DataManager;
 import citybus.datamanager.Time;
 
-public class citybus extends Activity {
+public class citybus extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,14 +32,9 @@ public class citybus extends Activity {
 			Log.d("citybus", "time: " + i.timeInfo.toString() + ", name: "
 					+ i.geoInfo.name);
 		}
-
 		// Test AR button setup, TODO change once we have real GUI
 		Button b = (Button) findViewById(R.id.btn_startar);
-		b.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				startAR();
-			}
-		});
+		b.setOnClickListener(this);
 	}
 
 	/**
@@ -92,6 +89,14 @@ public class citybus extends Activity {
 		pois.add(poi3);
 		pois.add(poi4);
 		return pois;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+
+		Intent i = new Intent(this, LargeImageScroller.class);
+		startActivity(i);
 	}
 
 }
