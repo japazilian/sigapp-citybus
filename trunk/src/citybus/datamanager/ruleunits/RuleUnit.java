@@ -2,6 +2,7 @@ package citybus.datamanager.ruleunits;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import citybus.datamanager.BusStopGeoInfo;
 import citybus.datamanager.BusStopGeoTimeInfo;
 import citybus.datamanager.DBConstants;
@@ -88,12 +89,14 @@ public class RuleUnit {
 				for (int j = 0; j < gap.length; j++) {
 					gapInterval += gap[j];
 				}
-				rowCounts[i] = (interval / gapInterval) * gap.length;
+				rowCounts[i] = 1 + (interval / gapInterval) * gap.length;
 				interval %= gapInterval;
 				for (int value : gap) {
 					if (interval >= value) {
 						interval -= value;
 						rowCounts[i]++;
+					} else {
+						break;
 					}
 				}
 			}
@@ -115,6 +118,7 @@ public class RuleUnit {
 		int[] busGapPattern = null;
 		Time patternStart = startTime;
 		int cutoffPoint = -1;
+		int row = 0;
 		if (busGapCutoffs != null) {
 			int cutoffCnt = busGapCutoffs.length;
 			for (cutoffPoint = 0; cutoffPoint < cutoffCnt; cutoffPoint++) {
@@ -124,78 +128,60 @@ public class RuleUnit {
 					patternStart = busGapCutoffs[cutoffPoint];
 				}
 			}
+			for (int i = 0; i < cutoffPoint; i++) {
+				row += rowCounts[i];
+			}
 			busGapPattern = busGap[cutoffPoint];
 		} else {
 			busGapPattern = busGap[0];
 		}
+		Log.d("citybus", "use pattern:" + patternStart);
 		// find which row on the bus schedule table it shoud return
 		int totalBusPatternCycleTime = 0;
 		int busPatternCnt = busGapPattern.length;
 		for (int i = 0; i < busPatternCnt; i++) {
 			totalBusPatternCycleTime += busGapPattern[i];
 		}
-		int interval = timeValue - patternStart.toValue();
-		int row = 0;
-		if (interval >= 0) {
-			if (cutoffPoint != -1 && cutoffPoint != 0) {
-				for (int i = 0; i < cutoffPoint; i++) {
-					int[] gap = busGap[i];
-					int cycleTime = 0;
-					int len = gap.length;
-					for (int j = 0; j < len; j++) {
-						cycleTime += gap[j];
-					}
-					int gapInterval = (i == 0 ? (busGapCutoffs[i].toValue() - startTime
-							.toValue())
-							: (busGapCutoffs[i].toValue() - busGapCutoffs[i - 1]
-									.toValue()));
-					row += (gapInterval / cycleTime) * len;
-					row = Math.max(0, row);
-					gapInterval %= cycleTime;
-					for (int value : gap) {
-						if (gapInterval >= value) {
-							row++;
-							gapInterval -= value;
-						} else {
-							break;
-						}
-					}
-				}
-			}
-			row += (interval / totalBusPatternCycleTime) * (busPatternCnt);
-			row = Math.max(0, row);
-			interval %= totalBusPatternCycleTime;
-			for (int value : busGapPattern) {
-				if (interval >= value) {
+		if (timeValue <= endTime.toValue()) {
+			int interval = timeValue - patternStart.toValue();
+			row += interval / totalBusPatternCycleTime * busGapPattern.length;
+			interval -= interval / totalBusPatternCycleTime
+					* totalBusPatternCycleTime;
+			for (int i = 0; i < busGapPattern.length; i++) {
+				if (interval >= busGapPattern[i]) {
 					row++;
-					interval -= value;
-				} else {
+					interval -= busGapPattern[i];
+				} else
 					break;
-				}
 			}
-			if (interval != 0)
+			if (interval > 0) {
+				interval = 0;
 				row++;
-		}
-		if (emptyBlocks != null) {
-			while (true) {
-				boolean allEmpty = true;
-				for (Block b : emptyBlocks) {
-					for (int i = 0; i < busPatternCnt; i++) {
-						if (!b.isEmpty(row, i)) {
-							allEmpty = false;
+			}
+			if (emptyBlocks != null) {
+				while (true) {
+					boolean allEmpty = true;
+					for (Block b : emptyBlocks) {
+						for (int i = 0; i < busPatternCnt; i++) {
+							if (!b.isEmpty(row, i)) {
+								allEmpty = false;
+								break;
+							}
+						}
+						if (!allEmpty) {
 							break;
 						}
 					}
-					if (!allEmpty) {
+					if (!allEmpty)
 						break;
-					}
+					row++;
 				}
-				if (!allEmpty)
-					break;
-				row++;
 			}
+		} else {
+			row = 0;
 		}
 		int fixedRow = row;
+		Log.d("citybus", "use row:" + fixedRow);
 		// generates routine info
 		int usePattern = 0;
 		for (usePattern = 0; usePattern < rowCounts.length; usePattern++) {
@@ -246,10 +232,12 @@ public class RuleUnit {
 		}
 		for (int i = 0; i < routineIndex.length; i++) {
 			boolean empty = false;
-			for (Block b : emptyBlocks) {
-				if (b.isEmpty(fixedRow, i)) {
-					empty = true;
-					break;
+			if (emptyBlocks != null) {
+				for (Block b : emptyBlocks) {
+					if (b.isEmpty(fixedRow, i)) {
+						empty = true;
+						break;
+					}
 				}
 			}
 			Time timeInfo;
