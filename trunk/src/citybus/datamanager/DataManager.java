@@ -1,13 +1,11 @@
 package citybus.datamanager;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
+import android.content.Context;
 import citybus.datamanager.ruleunits.RuleParser;
 import citybus.datamanager.ruleunits.RuleUnit;
-
-import android.content.Context;
 
 /**
  * Data Manager. This is central data system for bus schedules and location
