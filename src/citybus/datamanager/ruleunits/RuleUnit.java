@@ -2,7 +2,6 @@ package citybus.datamanager.ruleunits;
 
 import java.util.ArrayList;
 
-import android.util.Log;
 import citybus.datamanager.BusStopGeoInfo;
 import citybus.datamanager.BusStopGeoTimeInfo;
 import citybus.datamanager.DBConstants;
@@ -99,9 +98,6 @@ public class RuleUnit {
 				}
 			}
 		}
-		for (int i = 0; i < rowCounts.length; i++) {
-			Log.d("citybus", "row pattern " + i + ": count: " + rowCounts[i]);
-		}
 	}
 
 	public ArrayList<BusStopGeoTimeInfo> getCompleteRoutineInfo(Time time) {
@@ -180,7 +176,6 @@ public class RuleUnit {
 			if (interval != 0)
 				row++;
 		}
-		// generates routine info
 		if (emptyBlocks != null) {
 			while (true) {
 				boolean allEmpty = true;
@@ -201,6 +196,7 @@ public class RuleUnit {
 			}
 		}
 		int fixedRow = row;
+		// generates routine info
 		int usePattern = 0;
 		for (usePattern = 0; usePattern < rowCounts.length; usePattern++) {
 			if (row >= rowCounts[usePattern]) {
@@ -230,6 +226,24 @@ public class RuleUnit {
 			}
 		}
 		ArrayList<BusStopGeoTimeInfo> result = new ArrayList<BusStopGeoTimeInfo>();
+		if (fixedRow == 0 && specialTimes != null) {
+			int specialCnt = specialTimes.length;
+			for (int i = 0; i < specialCnt; i++) {
+				if (specialTimes[i] != null) {
+					if (time.toValue() < specialTimes[i].toValue()) {
+						BusStopGeoTimeInfo info = new BusStopGeoTimeInfo();
+						BusStopGeoInfo geo = new BusStopGeoInfo(
+								DBConstants.BusGpsInfo[routineIndex[i]][0],
+								DBConstants.BusGpsInfo[routineIndex[i]][1],
+								DBConstants.BusGpsInfo[routineIndex[i]][2],
+								routineIndex[i]);
+						info.geoInfo = geo;
+						info.timeInfo = specialTimes[i];
+						result.add(info);
+					}
+				}
+			}
+		}
 		for (int i = 0; i < routineIndex.length; i++) {
 			boolean empty = false;
 			for (Block b : emptyBlocks) {
