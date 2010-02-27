@@ -1,6 +1,8 @@
 package citybus.datamanager.ruleunits;
 
+public class NightRiderSatRuleUnit extends NightRiderFridayRuleUnit {
 
-public class NightRiderSatRuleUnit extends RuleUnit {
-
+	public NightRiderSatRuleUnit() {
+		super();
+	}
 }
