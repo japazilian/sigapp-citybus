@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/blue"
+    >
+<TextView
+            android:text="See All"
+            android:gravity="right"
+            android:textSize="25sp"
+            android:padding="53dip" 
+            android:layout_alignParentBottom="true"
+            />
+<TextView
+        android:id="@+id/BusStopTittle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/busstop"
+        android:gravity="center"
+        android:textSize="50sp"
+        />
+<TextView
+        android:id="@+id/NextArrival"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Next Arrival"
+        android:textSize="20sp"
+        android:layout_below="@id/BusStopTittle"
+        />
+<TextView
+        android:id="@+id/NextArrivalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time"
+        android:textSize="70sp"
+        android:layout_below="@id/NextArrival"
+        />        
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:stretchColumns="1"
+    android:layout_below="@id/NextArrivalTime"
+    android:id="@+id/table">
+    <TableRow>
+        <TextView
+            android:text="Distance from Stop"
+            android:padding="3dip"
+            android:textSize="15sp" />
+        <TextView
+            android:text="Next Arrival Times"
+            android:padding="3dip" 
+            android:gravity="right"
+            android:textSize="15sp"
+            />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="25m"
+            android:padding="3dip" 
+            android:textSize="30sp"/>
+        <TextView
+            android:text="3:55"
+            android:gravity="right"
+            android:padding="3dip" 
+            android:textSize="35sp"/>
+    </TableRow>
+    
+    <TableRow>
+        <TextView
+            android:text=""
+            android:padding="3dip" 
+            android:textSize="30sp"/>
+        <TextView
+            android:text="4:00"
+            android:gravity="right"
+            android:padding="3dip" 
+            android:textSize="35sp"/>
+    </TableRow>
+    
+    <TableRow>
+        <TextView
+            android:text=""
+            android:padding="3dip" 
+            android:textSize="30sp"/>
+        <TextView
+            android:text="4:05"
+            android:gravity="right"
+            android:padding="3dip" 
+            android:textSize="35sp"/>
+    </TableRow>
+    
+    <TableRow>
+        <TextView
+            android:text=""
+            android:padding="3dip" 
+            android:textSize="30sp"/>
+        <TextView
+            android:text="See Addidtion Info"
+            android:gravity="right"
+            android:padding="3dip" 
+            android:textSize="15sp"/>
+    </TableRow>
+    
+</TableLayout>
+        
+
+</RelativeLayout>
+
