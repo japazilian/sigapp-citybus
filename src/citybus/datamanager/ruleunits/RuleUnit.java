@@ -145,6 +145,8 @@ public class RuleUnit {
 		if (timeValue <= endTime.toValue()) {
 			int interval = timeValue - patternStart.toValue();
 			row += interval / totalBusPatternCycleTime * busGapPattern.length;
+			if (row < 0)
+				row = 0;
 			interval -= interval / totalBusPatternCycleTime
 					* totalBusPatternCycleTime;
 			for (int i = 0; i < busGapPattern.length; i++) {
@@ -185,7 +187,7 @@ public class RuleUnit {
 		// generates routine info
 		int usePattern = 0;
 		for (usePattern = 0; usePattern < rowCounts.length; usePattern++) {
-			if (row >= rowCounts[usePattern]) {
+			if (row > rowCounts[usePattern]) {
 				row -= rowCounts[usePattern];
 			} else {
 				break;
@@ -216,7 +218,8 @@ public class RuleUnit {
 			int specialCnt = specialTimes.length;
 			for (int i = 0; i < specialCnt; i++) {
 				if (specialTimes[i] != null) {
-					if (time.toValue() < specialTimes[i].toValue()) {
+					if (time.toValue() > endTime.toValue()
+							|| time.toValue() < specialTimes[i].toValue()) {
 						BusStopGeoTimeInfo info = new BusStopGeoTimeInfo();
 						BusStopGeoInfo geo = new BusStopGeoInfo(
 								DBConstants.BusGpsInfo[routineIndex[i]][0],
