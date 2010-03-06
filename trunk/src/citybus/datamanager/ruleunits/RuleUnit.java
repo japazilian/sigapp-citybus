@@ -45,6 +45,34 @@ public class RuleUnit {
 		specialTimes = null;
 	}
 
+	public Time getBusStopOffsetTime(Time busStopTime, int busStopId) {
+		int offsetTime = 0;
+		int counter = 0;
+		for (int busStop : routineIndex) {
+			counter++;
+			if (busStop == busStopId) {
+				break;
+			}
+		}
+		counter--;
+		for (int i = 0; i < counter; i++) {
+			offsetTime += stopGap[i];
+		}
+		int newTimeVal = busStopTime.toValue() - offsetTime;
+		int day = busStopTime.day;
+		Time t;
+		if (newTimeVal < 0) {
+			newTimeVal += 24 * 60;
+			t = new Time(newTimeVal);
+			t.day = day;
+		} else {
+			t = new Time(newTimeVal);
+			t.day = day;
+			t.decrementDay();
+		}
+		return t;
+	}
+
 	protected void initFields() {
 		stopCount = stopGap.length;
 		for (int i = 0; i < stopCount; i++) {
@@ -105,6 +133,8 @@ public class RuleUnit {
 
 	public ArrayList<BusStopGeoTimeInfo> getCompleteRoutineInfo(Time time) {
 		// make sure time is before start or between start/end
+		Time originalTime = new Time(time.toValue());
+		originalTime.day = time.day;
 		if (endTime.toValue() < startTime.toValue()) {
 			endTime.hour += 24;
 		}
@@ -228,6 +258,10 @@ public class RuleUnit {
 								routineIndex[i]);
 						info.geoInfo = geo;
 						info.timeInfo = specialTimes[i];
+						info.timeInfo.day = originalTime.day;
+						if (info.timeInfo.toValue() < originalTime.toValue()) {
+							info.timeInfo.incrementDay();
+						}
 						result.add(info);
 					}
 				}
@@ -244,11 +278,13 @@ public class RuleUnit {
 				}
 			}
 			Time timeInfo;
-			if (i == 0) {
-				timeInfo = new Time(start);
-			} else {
+			if (i != 0) {
 				start += stopGap[i - 1];
-				timeInfo = new Time(start);
+			}
+			timeInfo = new Time(start);
+			timeInfo.day = originalTime.day;
+			if (timeInfo.toValue() < originalTime.toValue()) {
+				timeInfo.incrementDay();
 			}
 			if (!empty) {
 				BusStopGeoTimeInfo info = new BusStopGeoTimeInfo();
