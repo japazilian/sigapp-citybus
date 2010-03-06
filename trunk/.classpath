@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry exported="true" kind="lib" path="/home/rod/android/wikitude/wikitudearintent.jar"/>
+	<classpathentry kind="lib" path="/Users/jfranklin773/Downloads/wikitudearintent.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

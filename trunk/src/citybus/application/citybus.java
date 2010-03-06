@@ -13,6 +13,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -90,13 +93,34 @@ public class citybus extends Activity implements OnClickListener {
 		pois.add(poi4);
 		return pois;
 	}
-
-	@Override
+ 
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 
 		Intent i = new Intent(this, LargeImageScroller.class);
 		startActivity(i);
 	}
+	public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.options_menu, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.map:
+        	Intent i = new Intent(this, LargeImageScroller.class);
+    		startActivity(i);
+            return true;
+        case R.id.pref:
+        	Intent k = new Intent(this, Preferences.class);
+			startActivity(k);
+			return true;
+
+        }
+        return false;
+    }
+    
+    
 
 }

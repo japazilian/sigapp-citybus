@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Loops to be shown on start">
+			<CheckBoxPreference android:title="Gold Loop"
+			android:defaultValue="false"
+			android:key="goldloop" />
+			<CheckBoxPreference android:title="Silver Loop"
+			android:defaultValue="false"
+			android:key="silverloop" />
+			<CheckBoxPreference android:title="Black Loop"
+			android:defaultValue="false"
+			android:key="blackloop" />
+			<CheckBoxPreference android:title="Tower Acres"
+			android:defaultValue="false"
+			android:key="toweracres" />
+			<CheckBoxPreference android:title="Bronze Loop"
+			android:defaultValue="false"
+			android:key="bronzeloop" />
+			<CheckBoxPreference android:title="Rose Ade"
+			android:defaultValue="false"
+			android:key="rossade" />
+			<CheckBoxPreference android:title="Nightrider"
+			android:defaultValue="false"
+			android:key="nightrider" />
+			<CheckBoxPreference android:title="South Campus/AvTech"
+			android:defaultValue="false"
+			android:key="southcampus" />
+	</PreferenceCategory>
+	
+</PreferenceScreen>
