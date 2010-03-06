@@ -65,10 +65,10 @@ public class RuleUnit {
 			newTimeVal += 24 * 60;
 			t = new Time(newTimeVal);
 			t.day = day;
+			t.decrementDay();
 		} else {
 			t = new Time(newTimeVal);
 			t.day = day;
-			t.decrementDay();
 		}
 		return t;
 	}
