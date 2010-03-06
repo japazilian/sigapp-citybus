@@ -1,7 +1,6 @@
 package citybus.datamanager;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.content.Context;
 import citybus.datamanager.ruleunits.RuleParser;
@@ -26,6 +25,10 @@ public class DataManager {
 	public static final int ROSS_ADE = 5;
 	public static final int NIGHT_RIDER = 6;
 	public static final int SOUTH_CAMPUS_AV_TECH = 7;
+
+	private static final int[] allRoutes = new int[] { GOLD_LOOP, SILVER_LOOP,
+			BLACK_LOOP, TOWER_ACRES, BRONZE_LOOP, ROSS_ADE, NIGHT_RIDER,
+			SOUTH_CAMPUS_AV_TECH };
 	private static ArrayList<ArrayList<BusStopGeoInfo>> loops = null;
 
 	/**
@@ -67,14 +70,42 @@ public class DataManager {
 	 * @return
 	 */
 	public static ArrayList<BusNextComingInfo> getNextComingBusInfoByLocation(
-			Context ctx, int busStopId, Date currentTime) throws Exception {
+			Context ctx, int busStopId, Time currentTime) {
 		if (ctx == null || currentTime == null || busStopId < 0
 				|| busStopId >= DBConstants.BusStopNames.length)
 			return null;
 		if (loops == null) {
 			initRoutines(ctx);
 		}
-		throw new Exception("Not Implemented yet.");
+		ArrayList<BusNextComingInfo> result = new ArrayList<BusNextComingInfo>();
+		for (int routeId : allRoutes) {
+			int[] busStops = DBConstants.RoutineIndex[routeId];
+			boolean passBusStop = false;
+			for (int busStop : busStops) {
+				if (busStop == busStopId) {
+					passBusStop = true;
+					break;
+				}
+			}
+			if (passBusStop) {
+				RuleUnit unit = RuleParser.getRoutineRule(routeId,
+						currentTime.day);
+				Time startTime = unit.getBusStopOffsetTime(currentTime,
+						busStopId);
+				ArrayList<BusStopGeoTimeInfo> routeResult = unit
+						.getCompleteRoutineInfo(startTime);
+				for (BusStopGeoTimeInfo routeStop : routeResult) {
+					if (routeStop.geoInfo.index == busStopId) {
+						BusNextComingInfo info = new BusNextComingInfo();
+						info.routeId = routeId;
+						info.geoTimeInfo = routeStop;
+						result.add(info);
+						break;
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
