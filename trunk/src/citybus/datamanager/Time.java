@@ -14,6 +14,12 @@ public class Time {
 	public int minute;
 	public int day;
 
+	public Time(Time t) {
+		this.hour = t.hour;
+		this.minute = t.minute;
+		this.day = t.day;
+	}
+
 	public Time(int time) {
 		day = Calendar.MONDAY;
 		hour = (time / 60) % 24;
