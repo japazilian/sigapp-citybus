@@ -66,13 +66,19 @@ public class DataManager {
 	 *            Bus Stop's Id, as defined in DBConstants
 	 * @param currentTime
 	 *            specify time, all buses comes after this point
+	 * @param nextComings
+	 *            Specify how many next coming schedules you need. 1 will give
+	 *            you the immediate upcoming bus, 2 will give you the next
+	 *            coming 2 bus information. etc.
 	 * @author zhang42
 	 * @return
 	 */
 	public static ArrayList<BusNextComingInfo> getNextComingBusInfoByLocation(
-			Context ctx, int busStopId, Time currentTime) {
+			Context ctx, int busStopId, Time currentTime, int nextComings) {
 		if (ctx == null || currentTime == null || busStopId < 0
 				|| busStopId >= DBConstants.BusStopNames.length)
+			return null;
+		if (nextComings <= 0)
 			return null;
 		if (loops == null) {
 			initRoutines(ctx);
@@ -90,18 +96,33 @@ public class DataManager {
 			if (passBusStop) {
 				RuleUnit unit = RuleParser.getRoutineRule(routeId,
 						currentTime.day);
-				Time startTime = unit.getBusStopOffsetTime(currentTime,
-						busStopId);
-				ArrayList<BusStopGeoTimeInfo> routeResult = unit
-						.getCompleteRoutineInfo(startTime);
-				for (BusStopGeoTimeInfo routeStop : routeResult) {
-					if (routeStop.geoInfo.index == busStopId) {
-						BusNextComingInfo info = new BusNextComingInfo();
-						info.routeId = routeId;
-						info.geoTimeInfo = routeStop;
-						result.add(info);
-						break;
+				int needNextComings = nextComings;
+				Time time = new Time(currentTime);
+				while (needNextComings > 0) {
+					Time startTime = unit.getBusStopOffsetTime(time, busStopId);
+					ArrayList<BusStopGeoTimeInfo> routeResult = unit
+							.getCompleteRoutineInfo(startTime);
+					for (BusStopGeoTimeInfo routeStop : routeResult) {
+						if (routeStop.geoInfo.index == busStopId) {
+							BusNextComingInfo info = new BusNextComingInfo();
+							info.routeId = routeId;
+							info.geoTimeInfo = routeStop;
+							int timeValue = routeStop.timeInfo.toValue();
+							timeValue++;
+							if (timeValue >= 24 * 60) {
+								timeValue -= 24 * 60;
+								time = new Time(timeValue);
+								time.day = routeStop.timeInfo.day;
+								time.incrementDay();
+							} else {
+								time = new Time(timeValue);
+								time.day = routeStop.timeInfo.day;
+							}
+							result.add(info);
+							break;
+						}
 					}
+					needNextComings--;
 				}
 			}
 		}
