@@ -1,24 +1,33 @@
 package citybus.application;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import citybus.datamanager.BusStopGeoTimeInfo;
+import citybus.datamanager.DataManager;
+import citybus.datamanager.Time;
 
 public class LargeImageScroller extends Activity { 
-
+	//MAPS API key 07XPb-up7aWtyU0enSMe8KthBCuNIU_f2QbtnHw
      // Physical display width and height. 
      private static int displayWidth = 0; 
      private static int displayHeight = 0; 
+     // Used to hold all the bus stop info (ones we want to display)
+     private static ArrayList<BusStopGeoTimeInfo> busStops;
 
      /** Called when the activity is first created. */ 
      @Override 
@@ -29,11 +38,14 @@ public class LargeImageScroller extends Activity {
           // orientation. To get these dynamically, we should hook onSizeChanged(). 
           // This simple example uses only landscape mode, so it's ok to get them 
           // once on startup and use those values throughout. 
+          
+          //Deprecated
           Display display = ((WindowManager) 
                getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
           displayWidth = display.getWidth();            
-          displayHeight = display.getHeight();     
-
+          displayHeight = display.getHeight(); 
+          
+          
           // SampleView constructor must be constructed last as it needs the 
           // displayWidth and displayHeight we just got. 
           //LinearLayout ll = (LinearLayout)findViewById(R.id.ll_map);
@@ -52,10 +64,11 @@ public class LargeImageScroller extends Activity {
           private float scrollByY = 0; //y amount to scroll by 
           private float startX = 0; //track x from one ACTION_MOVE to the next 
           private float startY = 0; //track y from one ACTION_MOVE to the next 
-
+          private Context ctx;
+          
           public SampleView(Context context) { 
                super(context); 
-
+               ctx=context;
                // Destination rect for our main canvas draw. It never changes. 
                displayRect = new Rect(0, 0, displayWidth, displayHeight); 
                // Scroll rect: this will be used to 'scroll around' over the 
@@ -123,6 +136,49 @@ public class LargeImageScroller extends Activity {
                // so we can repeat this update process. 
                scrollRectX = newScrollRectX; 
                scrollRectY = newScrollRectY; 
-          } 
+               
+          }
+         
+          private void initializeBusStops(int[] id) {
+        	  busStops = new ArrayList<BusStopGeoTimeInfo>(); //stores all bus stops
+        	  for(int i=0; i<id.length; i++) {
+        		  ArrayList<BusStopGeoTimeInfo> tmp = DataManager.getRoutineInfoById(
+        				  ctx, id[i], new Time(Calendar.SUNDAY, 0, 29));
+        		  busStops.addAll(tmp);
+        	  }
+          }
+          
+          private void drawStops() {
+        	  Point viewTopLeft = new Point();
+        	  viewTopLeft.x = scrollRectX;
+        	  viewTopLeft.y = scrollRectY;
+        	  
+        	  for (BusStopGeoTimeInfo stop : busStops) {
+        		  Point location = convertGPStoPix(stop);
+        		  if (location.x >= viewTopLeft.x && location.y >= viewTopLeft.y)
+        		        if (location.x <= (viewTopLeft.x + displayHeight) && location.y <= (viewTopLeft.y + displayWidth)) {
+        		        	//draw the point
+        		        	
+        		        }
+         	  }
+      		
+          }
+          /**
+           * @param BusStopGeoTimeInfo stop
+           * @return Point with x and y being gps position in pixels also scaled
+           */
+          private Point convertGPStoPix (BusStopGeoTimeInfo stop) {
+        	  
+        	  return null;
+          }
+
+		@Override
+		protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+			// TODO Auto-generated method stub
+			super.onSizeChanged(w, h, oldw, oldh);
+			displayWidth = w;
+			displayHeight = h;
+			
+		}
      } 
 }

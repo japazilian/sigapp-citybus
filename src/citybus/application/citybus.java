@@ -97,7 +97,7 @@ public class citybus extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 
-		Intent i = new Intent(this, LargeImageScroller.class);
+		Intent i = new Intent(this, citybusMap.class);
 		startActivity(i);
 	}
 	public boolean onCreateOptionsMenu(Menu menu) {
