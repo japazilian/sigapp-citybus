@@ -50,12 +50,13 @@ public class citybusMap extends MapActivity {
 		busStopItemizedOverlay itemizedoverlay = new busStopItemizedOverlay(drawable, this);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		ArrayList<String> addedStops = new ArrayList<String>();//used to check if I already added that stop (no point in printing again)
+		Calendar now = Calendar.getInstance();
 		
 		for(int j=0; j<8; j++) { //Better way to write this? TODO
 			if(!checkPreferences(j, prefs))//check if they put it in the preferences
 				continue;
 			ArrayList<BusStopGeoTimeInfo> info = DataManager.getRoutineInfoById(//Date might be wierd, check with Fan TODO
-					this, j, new Time(Calendar.DAY_OF_WEEK, Calendar.HOUR_OF_DAY, Calendar.MINUTE));
+					this, j, new Time(now.get(Calendar.DAY_OF_WEEK), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE)));
 			for (BusStopGeoTimeInfo i : info) {
 				if(addedStops.contains(i.geoInfo.name))
 					continue;
@@ -65,9 +66,9 @@ public class citybusMap extends MapActivity {
 				GeoPoint point = new GeoPoint((int)(i.geoInfo.latitude*Math.pow(10, 6)), (int)(i.geoInfo.longitude*Math.pow(10, 6)));
 				OverlayItem overlayitem = new OverlayItem(point, i.geoInfo.name, i.timeInfo.toString());
 				itemizedoverlay.addOverlay(overlayitem);
-				//Log.d("citybus", "lat: " + point.getLatitudeE6() + ", long: "	+ point.getLongitudeE6());
 			}
 		}
+		Log.d("citybus", "Day: " + now.get(Calendar.DAY_OF_WEEK) + ", Hour: " + now.get(Calendar.HOUR_OF_DAY) + ", Minute: "+now.get(Calendar.MINUTE));
 		
 		mapOverlays.add(itemizedoverlay);		
 	}
