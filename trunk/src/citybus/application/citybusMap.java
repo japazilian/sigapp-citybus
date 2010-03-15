@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Window;
 import citybus.datamanager.BusStopGeoTimeInfo;
@@ -37,24 +39,64 @@ public class citybusMap extends MapActivity {
 		addBusStops();
 		
 	}
-	public void addBusStops() {
+	
+	/**
+	 * Adds correct bus stops that need to be drawn then adds the array list to mapview
+	 */
+	private void addBusStops() {
 		
 		List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(R.drawable.busstop);
 		busStopItemizedOverlay itemizedoverlay = new busStopItemizedOverlay(drawable, this);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		ArrayList<String> addedStops = new ArrayList<String>();//used to check if I already added that stop (no point in printing again)
 		
-		ArrayList<BusStopGeoTimeInfo> info = DataManager.getRoutineInfoById(
-				this, DataManager.GOLD_LOOP, new Time(Calendar.SUNDAY, 0, 29));
-		for (BusStopGeoTimeInfo i : info) {
-			GeoPoint point = new GeoPoint((int)(i.geoInfo.latitude*Math.pow(10, 6)), (int)(i.geoInfo.longitude*Math.pow(10, 6)));
-			OverlayItem overlayitem = new OverlayItem(point, i.geoInfo.name, i.timeInfo.toString());
-			itemizedoverlay.addOverlay(overlayitem);
-			Log.d("citybus", "lat: " + point.getLatitudeE6() + ", long: "
-					+ point.getLongitudeE6());
+		for(int j=0; j<8; j++) { //Better way to write this? TODO
+			if(!checkPreferences(j, prefs))//check if they put it in the preferences
+				continue;
+			ArrayList<BusStopGeoTimeInfo> info = DataManager.getRoutineInfoById(//Date might be wierd, check with Fan TODO
+					this, j, new Time(Calendar.DAY_OF_WEEK, Calendar.HOUR_OF_DAY, Calendar.MINUTE));
+			for (BusStopGeoTimeInfo i : info) {
+				if(addedStops.contains(i.geoInfo.name))
+					continue;
+				else
+					addedStops.add(i.geoInfo.name);
+				
+				GeoPoint point = new GeoPoint((int)(i.geoInfo.latitude*Math.pow(10, 6)), (int)(i.geoInfo.longitude*Math.pow(10, 6)));
+				OverlayItem overlayitem = new OverlayItem(point, i.geoInfo.name, i.timeInfo.toString());
+				itemizedoverlay.addOverlay(overlayitem);
+				//Log.d("citybus", "lat: " + point.getLatitudeE6() + ", long: "	+ point.getLongitudeE6());
+			}
 		}
 		
 		mapOverlays.add(itemizedoverlay);		
 	}
+	
+	/**
+	 * Check to see if it is checked in preferences, better way? TODO
+	 */
+	private boolean checkPreferences(int i, SharedPreferences prefs) {		
+		switch(i) {
+		case 0: 
+			return prefs.getBoolean("goldloop", false);
+		case 1: 
+			return prefs.getBoolean("silverloop", false);
+		case 2: 
+			return prefs.getBoolean("blackloop", false);
+		case 3: 
+			return prefs.getBoolean("toweracres", false);
+		case 4: 
+			return prefs.getBoolean("bronzeloop", false);
+		case 5: 
+			return prefs.getBoolean("rossade", false);
+		case 6: 
+			return prefs.getBoolean("nightrider", false);
+		case 7: 
+			return prefs.getBoolean("southcampus", false);
+		}
+		return false;		
+	}
+	
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
