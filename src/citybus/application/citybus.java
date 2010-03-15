@@ -19,7 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import citybus.datamanager.BusStopGeoTimeInfo;
+import citybus.datamanager.BusNextComingInfo;
+import citybus.datamanager.DBConstants;
 import citybus.datamanager.DataManager;
 import citybus.datamanager.Time;
 
@@ -29,11 +30,19 @@ public class citybus extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		// test data manager
-		ArrayList<BusStopGeoTimeInfo> info = DataManager.getRoutineInfoById(
-				this, DataManager.GOLD_LOOP, new Time(Calendar.SUNDAY, 0, 29));
-		for (BusStopGeoTimeInfo i : info) {
-			Log.d("citybus", "time: " + i.timeInfo.toString() + ", name: "
-					+ i.geoInfo.name);
+		// ArrayList<BusStopGeoTimeInfo> info = DataManager.getRoutineInfoById(
+		// this, DataManager.GOLD_LOOP, new Time(Calendar.SUNDAY, 0, 29));
+		// for (BusStopGeoTimeInfo i : info) {
+		// Log.d("citybus", "time: " + i.timeInfo.toString() + ", name: "
+		// + i.geoInfo.name);
+		// }
+
+		ArrayList<BusNextComingInfo> info2 = DataManager
+				.getNextComingBusInfoByLocation(this, DBConstants.THIRD_UNIV,
+						new Time(Calendar.MONDAY, 14, 40), 3);
+		for (BusNextComingInfo i : info2) {
+			Log.d("citybus", "bus ID=" + i.routeId + ",time="
+					+ i.geoTimeInfo.timeInfo.toString());
 		}
 		// Test AR button setup, TODO change once we have real GUI
 		Button b = (Button) findViewById(R.id.btn_startar);
@@ -93,34 +102,33 @@ public class citybus extends Activity implements OnClickListener {
 		pois.add(poi4);
 		return pois;
 	}
- 
+
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 
 		Intent i = new Intent(this, citybusMap.class);
 		startActivity(i);
 	}
+
 	public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.options_menu, menu);
-        return true;
-    }
-    
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.map:
-        	Intent i = new Intent(this, LargeImageScroller.class);
-    		startActivity(i);
-            return true;
-        case R.id.pref:
-        	Intent k = new Intent(this, Preferences.class);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.layout.options_menu, menu);
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.map:
+			Intent i = new Intent(this, LargeImageScroller.class);
+			startActivity(i);
+			return true;
+		case R.id.pref:
+			Intent k = new Intent(this, Preferences.class);
 			startActivity(k);
 			return true;
 
-        }
-        return false;
-    }
-    
-    
+		}
+		return false;
+	}
 
 }

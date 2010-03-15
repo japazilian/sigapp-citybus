@@ -10,7 +10,7 @@ public class GoldLoopRuleUnit extends RuleUnit {
 	public GoldLoopRuleUnit() {
 		routineIndex = DBConstants.RoutineIndex[0];
 		stopGap = new int[] { 5, 5, 5, 5, 7 };
-		busGap = new int[][] { { 5, 5, 20, 5, 5, 20 }, { 30 } };
+		busGap = new int[][] { { 5, 5, 20 }, { 30 } };
 		busGapCutoffs = new Time[] { new Time(17, 35) };
 		startTime = new Time(7, 5);
 		endTime = new Time(0, 5);
