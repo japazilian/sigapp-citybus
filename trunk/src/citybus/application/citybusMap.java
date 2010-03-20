@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Window;
 import citybus.datamanager.BusStopGeoTimeInfo;
 import citybus.datamanager.DataManager;
@@ -36,8 +35,16 @@ public class citybusMap extends MapActivity {
 		GeoPoint point = new GeoPoint(40430060, -86918760);
 		mapView.getController().setCenter(point);
 		//mapView.getLatitudeSpan();
+		addBusRoutes();
 		addBusStops();
-		
+	}
+	
+	/**
+	 * Adds bus routes, we're using one overlay and painting all routes on that one overlay
+	 */
+	private void addBusRoutes() {
+		busRouteOverlay routeOverlay = new busRouteOverlay(getBaseContext());
+		mapView.getOverlays().add(routeOverlay);
 	}
 	
 	/**
@@ -68,8 +75,7 @@ public class citybusMap extends MapActivity {
 				itemizedoverlay.addOverlay(overlayitem);
 			}
 		}
-		Log.d("citybus", "Day: " + now.get(Calendar.DAY_OF_WEEK) + ", Hour: " + now.get(Calendar.HOUR_OF_DAY) + ", Minute: "+now.get(Calendar.MINUTE));
-		
+		//Log.d("citybus", "Day: " + now.get(Calendar.DAY_OF_WEEK) + ", Hour: " + now.get(Calendar.HOUR_OF_DAY) + ", Minute: "+now.get(Calendar.MINUTE));
 		mapOverlays.add(itemizedoverlay);		
 	}
 	
@@ -102,5 +108,4 @@ public class citybusMap extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-
 }

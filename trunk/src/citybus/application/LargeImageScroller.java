@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -138,7 +137,7 @@ public class LargeImageScroller extends Activity {
                scrollRectY = newScrollRectY; 
                
           }
-         
+          
           private void initializeBusStops(int[] id) {
         	  busStops = new ArrayList<BusStopGeoTimeInfo>(); //stores all bus stops
         	  for(int i=0; i<id.length; i++) {
