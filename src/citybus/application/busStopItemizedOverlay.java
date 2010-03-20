@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -16,6 +17,7 @@ import citybus.datamanager.DataManager;
 import citybus.datamanager.Time;
 
 import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
@@ -53,7 +55,7 @@ public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	  
 	  ArrayList<BusNextComingInfo> info = DataManager.getNextComingBusInfoByLocation(//Date might be weird, check with Fan TODO
 				mContext, stopIdByName(item.getTitle()), new Time(now.get(Calendar.DAY_OF_WEEK), 
-						now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE)), 3);
+						now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE)), 4);
 	  Log.d("citybus debug", now.get(Calendar.HOUR_OF_DAY)+":"+ now.get(Calendar.MINUTE));
 	  for (BusNextComingInfo i : info) {
 		  if(!checkPreferences(i.routeId, prefs))//check if they put it in the preferences
@@ -135,12 +137,19 @@ public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	}
 	private String formatTime(BusNextComingInfo i) {
 		String message = "";
-		if(i.geoTimeInfo.timeInfo.hour == 0)
+		if(i.geoTimeInfo.timeInfo.hour == 0) //am but we don't want it to say 0:23am, we want 12:23am
 			  message += "12" + String.format(":%02d", i.geoTimeInfo.timeInfo.minute) + " am";
-		else if(i.geoTimeInfo.timeInfo.hour > 12) //pm
+		else if(i.geoTimeInfo.timeInfo.hour == 12) //pm but we don't want to subtract 12
+			  message += "12" + String.format(":%02d", i.geoTimeInfo.timeInfo.minute) + " pm";
+		else if(i.geoTimeInfo.timeInfo.hour > 12) //pm (between the hours of 13 and 23)
 			  message += String.format("%02d", i.geoTimeInfo.timeInfo.hour-12) + String.format(":%02d", i.geoTimeInfo.timeInfo.minute) + " pm";
-		else								//am
+		else								//am (between the hours of 1 and 11)
 			  message += String.format("%02d", i.geoTimeInfo.timeInfo.hour) + String.format(":%02d", i.geoTimeInfo.timeInfo.minute) + " am"; 
 		return message;
 	}
+	@Override
+	public void draw(Canvas canvas, MapView arg1, boolean arg2) {
+		super.draw(canvas, arg1, arg2);
+	}
+	
 }
