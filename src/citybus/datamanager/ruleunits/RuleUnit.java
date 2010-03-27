@@ -316,4 +316,9 @@ public class RuleUnit {
 					&& column <= toColumn;
 		}
 	}
+
+	public boolean isLastBus(Time t) {
+		return (t.toValue() == endTime.toValue() || t.toValue() + 24 * 60 == endTime
+				.toValue());
+	}
 }

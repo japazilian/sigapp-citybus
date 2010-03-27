@@ -56,6 +56,55 @@ public class DataManager {
 		return rule.getCompleteRoutineInfo(currentTime);
 	}
 
+	
+	/**
+	 * Returns a list of full day schedule for a specific bus at specific stop on specific day. 
+	 * @param ctx
+	 * @param routineId   bus id
+	 * @param stopId      bus stop id
+	 * @param dayOfWeek   day of week, use Calendar constants
+	 * @return
+	 */
+	public static ArrayList<BusNextComingInfo> getAllTimeForBus(Context ctx,
+			int routineId, int stopId, int dayOfWeek) {
+		Time t = new Time(dayOfWeek, 5, 0);
+		ArrayList<BusNextComingInfo> result = new ArrayList<BusNextComingInfo>();
+
+		RuleUnit unit = RuleParser.getRoutineRule(routineId, t.day);
+		boolean finish = false;
+		while (!finish) {
+			Time startTime = unit.getBusStopOffsetTime(t, stopId);
+			ArrayList<BusStopGeoTimeInfo> routeResult = unit
+					.getCompleteRoutineInfo(startTime);
+			for (BusStopGeoTimeInfo routeStop : routeResult) {
+				if (routeStop.geoInfo.index == stopId) {
+					BusNextComingInfo info = new BusNextComingInfo();
+					info.routeId = routineId;
+					info.geoTimeInfo = routeStop;
+					int timeValue = routeStop.timeInfo.toValue();
+					Time resultStartTime = unit.getBusStopOffsetTime(new Time(
+							timeValue), stopId);
+					if (unit.isLastBus(resultStartTime)) {
+						finish = true;
+					}
+					timeValue++;
+					if (timeValue >= 24 * 60) {
+						timeValue -= 24 * 60;
+						t = new Time(timeValue);
+						t.day = routeStop.timeInfo.day;
+						t.incrementDay();
+					} else {
+						t = new Time(timeValue);
+						t.day = routeStop.timeInfo.day;
+					}
+					result.add(info);
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Gets all immediate incoming buses at specified bus stop after specified
 	 * time
