@@ -9,6 +9,8 @@ import org.openintents.intents.WikitudeARIntent;
 import org.openintents.intents.WikitudePOI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import citybus.datamanager.BusNextComingInfo;
 import citybus.datamanager.DBConstants;
 import citybus.datamanager.DataManager;
@@ -45,8 +47,16 @@ public class citybus extends Activity implements OnClickListener {
 					+ i.geoTimeInfo.timeInfo.toString());
 		}
 		// Test AR button setup, TODO change once we have real GUI
-		Button b = (Button) findViewById(R.id.btn_startar);
-		b.setOnClickListener(this);
+		//Button b = (Button) findViewById(R.id.btn_startar);
+		//b.setOnClickListener(this);
+		ImageButton vmbutton = (ImageButton)findViewById(R.id.ViewMapButton);
+	    vmbutton.setOnClickListener(this);
+	    ImageButton plbutton = (ImageButton)findViewById(R.id.PlanButton);
+	    plbutton.setOnClickListener(this);
+	    ImageButton prbutton = (ImageButton)findViewById(R.id.PrefButton);
+	    prbutton.setOnClickListener(this);
+	    ImageButton abbutton = (ImageButton)findViewById(R.id.AboutButton);
+	    abbutton.setOnClickListener(this);
 	}
 
 	/**
@@ -105,9 +115,36 @@ public class citybus extends Activity implements OnClickListener {
 
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-
-		Intent i = new Intent(this, citybusMap.class);
-		startActivity(i);
+		switch (v.getId()) {
+		
+			case R.id.ViewMapButton:
+				Intent i = new Intent(this, citybusMap.class);
+				startActivity(i);
+				break;
+			case R.id.PlanButton:
+				Builder warning = new AlertDialog.Builder(this); 
+				warning.setTitle("Warning"); 
+				warning.setIcon(R.drawable.cone); 
+				warning.setMessage("Not Implemented.");  
+				warning.setNegativeButton("back", null); 
+				warning.show(); 
+				break;
+			case R.id.PrefButton:
+				Intent k = new Intent(this, Preferences.class);
+				startActivity(k);
+				break;
+			case R.id.AboutButton:
+				Builder about = new AlertDialog.Builder(this); 
+				about.setTitle("About"); 
+				about.setIcon(R.drawable.bulb); 
+				about.setMessage("product of SIGAPP.");  
+				about.setNegativeButton("back", null); 
+				about.show(); 
+				break;
+			
+		
+		}
+		
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
