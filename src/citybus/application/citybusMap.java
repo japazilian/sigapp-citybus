@@ -190,8 +190,9 @@ public class citybusMap extends MapActivity {
 
 	private void buildAlertMessageNoGps() {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(
-				"Yout GPS seems to be disabled, do you want to enable it?")
+		builder
+				.setMessage(
+						"Augmented Reality View requires GPS, but your GPS seems to be disabled. Do you want to enable it?")
 				.setCancelable(false).setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
 							public void onClick(final DialogInterface dialog,
