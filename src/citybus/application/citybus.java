@@ -146,7 +146,7 @@ public class citybus extends Activity implements OnClickListener {
 		}
 		
 	}
-
+	/*
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.layout.options_menu, menu);
@@ -155,17 +155,17 @@ public class citybus extends Activity implements OnClickListener {
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.map:
+		case R.id.ar:
 			Intent i = new Intent(this, LargeImageScroller.class);
 			startActivity(i);
 			return true;
-		case R.id.pref:
+		case R.id.routes:
 			Intent k = new Intent(this, Preferences.class);
 			startActivity(k);
 			return true;
 
 		}
 		return false;
-	}
+	}*/
 
 }

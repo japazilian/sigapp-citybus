@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/map"
-          android:title="Map" />
-    <item android:id="@+id/pref"
-          android:title="Preferences" />
+    <item android:id="@+id/ar"
+          android:title="Augmented Reality" 
+          android:icon="@android:drawable/ic_menu_view"/>
+    <item android:id="@+id/routes"
+          android:title="CityBus Routes" 
+          android:icon="@android:drawable/ic_menu_share"/>
 </menu>

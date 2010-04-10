@@ -17,11 +17,21 @@ public class busRouteOverlay extends Overlay {
 	private SharedPreferences prefs;
 	@SuppressWarnings("unused")
 	private Context ctx;
+	private boolean preferences[];
+	private Paint PaintStyles[];
 
 	public busRouteOverlay(Context ctx) {
 		super();
 		this.ctx = ctx;
 		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		preferences = new boolean[8];
+		PaintStyles = new Paint[8];
+		for(int i=0; i<8; i++) {
+				preferences[i] = checkPreferences(i);
+				Paint p = new Paint();
+				setPaintProperties(p, i);
+				PaintStyles[i] = p;			
+		}
 	}
 
 	@Override
@@ -35,12 +45,12 @@ public class busRouteOverlay extends Overlay {
 
 		for (int j = 0; j < 8; j++) {
 			// initialize for each loop
-			if (!checkPreferences(j))
+			if (!preferences[j])
 				continue;
 			int[][] currentLoop = getCurLoop(j);
 			// TODO use final Paint[] instead of function. More Paint takes more
 			// memory, but better than slow performance.
-			setPaintProperties(paint, j);
+			paint = PaintStyles[j];
 			// draw all of the dots for the loop
 			for (int i = 0; i < currentLoop.length - 1; i++) {
 				GeoPoint geopoint = new GeoPoint((currentLoop[i][1]),
