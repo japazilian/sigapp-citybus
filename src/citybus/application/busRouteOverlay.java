@@ -45,7 +45,7 @@ public class busRouteOverlay extends Overlay {
 
 		for (int j = 0; j < 8; j++) {
 			// initialize for each loop
-			if (!preferences[j])
+			if (!checkPreferences(j))
 				continue;
 			int[][] currentLoop = getCurLoop(j);
 			// TODO use final Paint[] instead of function. More Paint takes more

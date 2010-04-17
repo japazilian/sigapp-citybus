@@ -164,6 +164,11 @@ public class citybusMap extends MapActivity {
 	}
 
 	public void startAR() {
+		//WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(),
+		//		"F606E0CFD83ACC9801914AFF3F7B159C", "Purdue ACM SigApp");
+		//22A39580649CBE161455B22C0E71D990
+		WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(), null, null);
+
 		// WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(),
 		// "F606E0CFD83ACC9801914AFF3F7B159C", "Purdue ACM SigApp");
 		final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -172,9 +177,7 @@ public class citybusMap extends MapActivity {
 			buildAlertMessageNoGps();
 			return;
 		}
-
-		WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(),
-				null, null);
+		//WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(), null, null);
 		// create new intent, needs a key that you get after
 		// registering with them
 		intent.addPOIs(createPOIList()); // Adds the array list to the intent
@@ -266,5 +269,11 @@ public class citybusMap extends MapActivity {
 		 */
 		return pois;
 	}
-
+	@Override
+	protected void onResume() {
+		mapView.getOverlays().clear();
+		addBusRoutes();
+		addBusStops();
+		super.onResume();
+	}
 }
