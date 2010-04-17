@@ -10,8 +10,7 @@
 		android:scaleType="fitXY" android:layout_weight="2"
 		android:layout_width="wrap_content"></ImageView>
 	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_weight="1"
-		android:padding="1dip">
+		android:layout_height="wrap_content" android:layout_weight="1">
 		<ImageButton android:id="@+id/ViewMapButton" android:src="@drawable/selector"
 			android:scaleType="fitXY" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:background="#fff"
