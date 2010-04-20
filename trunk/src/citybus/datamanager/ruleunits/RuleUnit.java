@@ -321,4 +321,12 @@ public class RuleUnit {
 		return (t.toValue() == endTime.toValue() || t.toValue() + 24 * 60 == endTime
 				.toValue());
 	}
+
+	public boolean isUniqueStop(int stopId) {
+		for (int routineStop : routineIndex) {
+			if (stopId == routineStop)
+				return true;
+		}
+		return false;
+	}
 }
