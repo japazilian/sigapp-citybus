@@ -56,13 +56,17 @@ public class DataManager {
 		return rule.getCompleteRoutineInfo(currentTime);
 	}
 
-	
 	/**
-	 * Returns a list of full day schedule for a specific bus at specific stop on specific day. 
+	 * Returns a list of full day schedule for a specific bus at specific stop
+	 * on specific day.
+	 * 
 	 * @param ctx
-	 * @param routineId   bus id
-	 * @param stopId      bus stop id
-	 * @param dayOfWeek   day of week, use Calendar constants
+	 * @param routineId
+	 *            bus id
+	 * @param stopId
+	 *            bus stop id
+	 * @param dayOfWeek
+	 *            day of week, use Calendar constants
 	 * @return
 	 */
 	public static ArrayList<BusNextComingInfo> getAllTimeForBus(Context ctx,
@@ -71,6 +75,7 @@ public class DataManager {
 		ArrayList<BusNextComingInfo> result = new ArrayList<BusNextComingInfo>();
 
 		RuleUnit unit = RuleParser.getRoutineRule(routineId, t.day);
+		boolean isUniqueStop = unit.isUniqueStop(stopId);
 		boolean finish = false;
 		while (!finish) {
 			Time startTime = unit.getBusStopOffsetTime(t, stopId);
@@ -98,6 +103,9 @@ public class DataManager {
 						t.day = routeStop.timeInfo.day;
 					}
 					result.add(info);
+					if (!isUniqueStop) {
+						result.add(null);
+					}
 					break;
 				}
 			}
@@ -124,6 +132,7 @@ public class DataManager {
 	 */
 	public static ArrayList<BusNextComingInfo> getNextComingBusInfoByLocation(
 			Context ctx, int busStopId, Time currentTime, int nextComings) {
+
 		if (ctx == null || currentTime == null || busStopId < 0
 				|| busStopId >= DBConstants.BusStopNames.length)
 			return null;
