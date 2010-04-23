@@ -130,8 +130,8 @@ public class citybus extends Activity implements OnClickListener {
 				warning.show(); 
 				break;
 			case R.id.PrefButton:
-				Intent k = new Intent(this, Preferences.class);
-				startActivity(k);
+				Intent list = new Intent(this, List2.class);
+				startActivity(list);
 				break;
 			case R.id.AboutButton:
 				Builder about = new AlertDialog.Builder(this); 
