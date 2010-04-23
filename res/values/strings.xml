@@ -3,4 +3,9 @@
     <string name="app_name">CityBus</string>
     <string name="busstop">Bus Stop</string>
     <string name="time">3:50</string>
+    <string-array name="day_array">
+        <item>Week</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>

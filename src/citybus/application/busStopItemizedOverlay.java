@@ -6,6 +6,7 @@ import java.util.Calendar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -80,6 +81,12 @@ public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	  dialog.setNegativeButton("Close", new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
               dialog.cancel();
+         }
+	  });
+	  dialog.setNeutralButton("More Detail", new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int id) {
+        	  Intent list = new Intent(mContext, List2.class);
+        	  mContext.startActivity(list);
          }
 	  });
 	  dialog.show();

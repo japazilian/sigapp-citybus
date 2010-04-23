@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+	<TextView 
+		android:id="@+id/tasks_title"
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:text="GoldLoop"
+	    android:textSize="40sp"/>
+	 
+	 <Spinner 
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tasks_title"
+        android:layout_alignParentRight="true"
+        />
+	
+		<Button
+			android:id="@+id/back_button"
+	 		android:layout_width="wrap_content"
+	 		android:layout_height="wrap_content"
+	 		android:text="&lt;&lt;" 
+	 		android:layout_below = "@id/tasks_title"
+	 		/>
+	 	<Button
+			android:id="@+id/next_button"
+	 		android:layout_width="wrap_content"
+	 		android:layout_height="wrap_content"
+	 		android:text="&gt;&gt;"
+	 		android:layout_alignParentRight="true"
+	 		android:layout_below = "@id/tasks_title"/>
+	<LinearLayout
+	 	android:id="@+id/ll_list"
+	 	android:layout_width="fill_parent"
+	 	android:layout_height="wrap_content"
+	 	android:layout_below = "@id/tasks_title"
+	 	android:gravity="center">
+	 	<TextView 
+			android:id="@+id/tasks_title1"
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content"
+		    android:layout_toRightOf="@id/back_button"
+		    android:text="3rd Street"
+		    android:textSize="30sp" />
+		
+	</LinearLayout>
+ 	
+ 		
+	<ListView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@id/android:list"
+		android:layout_below="@id/back_button"
+		/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@id/android:empty"
+		android:text="Error with Loop/Busstop"
+		android:gravity="center_vertical|center_horizontal"
+		android:layout_below="@id/back_button" />
+		
+	
+</RelativeLayout>

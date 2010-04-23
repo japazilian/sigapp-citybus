@@ -15,11 +15,11 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".LargeImageScroller" android:label="Map View">
-		</activity>
 		<activity android:name=".citybusMap" android:label="Map View">
 		</activity>
 		<activity android:name=".Preferences" android:label="Preferences">
+		</activity>
+		<activity android:name=".List2" android:label="Schedule">
 		</activity>
 	</application>
 	<uses-sdk android:minSdkVersion="3" />
