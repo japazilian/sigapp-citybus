@@ -323,10 +323,12 @@ public class RuleUnit {
 	}
 
 	public boolean isUniqueStop(int stopId) {
-		for (int routineStop : routineIndex) {
-			if (stopId == routineStop)
-				return true;
+		int count = 0;
+		for (int stop : routineIndex) {
+			if (stopId == stop) {
+				count++;
+			}
 		}
-		return false;
+		return count == 1;
 	}
 }

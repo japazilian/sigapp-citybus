@@ -75,7 +75,6 @@ public class DataManager {
 		ArrayList<BusNextComingInfo> result = new ArrayList<BusNextComingInfo>();
 
 		RuleUnit unit = RuleParser.getRoutineRule(routineId, t.day);
-		boolean isUniqueStop = unit.isUniqueStop(stopId);
 		boolean finish = false;
 		while (!finish) {
 			Time startTime = unit.getBusStopOffsetTime(t, stopId);
@@ -103,9 +102,6 @@ public class DataManager {
 						t.day = routeStop.timeInfo.day;
 					}
 					result.add(info);
-					if (!isUniqueStop) {
-						result.add(null);
-					}
 					break;
 				}
 			}
@@ -198,5 +194,17 @@ public class DataManager {
 		for (int i = 0; i < TOTAL_LOOP_COUNT; i++) {
 			loops.add(dbManager.getBusStopsByRoutine(i));
 		}
+	}
+
+	/**
+	 * Checks if a stop is unique on a route
+	 * @param routeId
+	 * @param day
+	 * @param stopId
+	 * @return
+	 */
+	public static boolean isUniqueStop(int routeId, int day, int stopId) {
+		RuleUnit unit = RuleParser.getRoutineRule(routeId, day);
+		return unit.isUniqueStop(stopId);
 	}
 }
