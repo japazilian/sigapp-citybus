@@ -29,7 +29,18 @@ public class List2 extends ListActivity {
         
         String[] Times = new String[info.size()];
         for(int i=0; i<info.size(); i++) {
-        	Times[i] = "" + info.get(i).geoTimeInfo.timeInfo.hour +":"+ info.get(i).geoTimeInfo.timeInfo.minute;
+        	String postfix = "am";
+        	if(info.get(i).geoTimeInfo.timeInfo.hour == 0){
+        		info.get(i).geoTimeInfo.timeInfo.hour = 12;
+        	}
+        	else if(info.get(i).geoTimeInfo.timeInfo.hour > 12){
+        		info.get(i).geoTimeInfo.timeInfo.hour = info.get(i).geoTimeInfo.timeInfo.hour-12;
+        		postfix = "pm";
+        	}
+        	else if(info.get(i).geoTimeInfo.timeInfo.hour == 12){
+        		postfix = "pm";
+        	}
+        	Times[i] = "" + info.get(i).geoTimeInfo.timeInfo.hour +":"+ info.get(i).geoTimeInfo.timeInfo.minute+" "+postfix;
         }
 
         setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, Times));
