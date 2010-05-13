@@ -49,8 +49,7 @@ The following list explains the different usage of querys:
       ** etc.
   * Example:
     ** Call:
-        ArrayList< BusNextComingInfo > info2 = DataManager
-                .getNextComingBusInfoByLocation(this, DBConstants.THIRD_UNIV,
+        ArrayList< BusNextComingInfo > info2 = DataManager                .getNextComingBusInfoByLocation(this, DBConstants.THIRD_UNIV,
                         new Time(Calendar.MONDAY, 8, 0), 4);
         for (BusNextComingInfo i : info2) {
             Log.d("citybus", "bus ID=" + i.routeId + ",time="
@@ -78,7 +77,7 @@ The following list explains the different usage of querys:
   * This method makes query to get a full scheudle list for a bus at a specific bus stop on a specific day.
   * Returns ArrayList< BusNextComingInfo >
   * Usage Example:
-    ** ArrayList<BusNextComingInfo> info =
+    ** ArrayList< BusNextComingInfo > info =
         DataManager.getAllTimeForBus(this,
         DataManager.GOLD_LOOP, DBConstants.THIRD_UNIV, Calendar.MONDAY);
     ** This will return all times for gold loop on third & university stop on Monday.
