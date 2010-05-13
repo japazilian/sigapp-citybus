@@ -21,7 +21,7 @@ DataManager currently supports geo/time information query for loops.
 
 The following list explains the different usage of querys:
 
-==DataManger.getRoutineInfoById(Context ctx, int routineId, Time currentTime)==
+==DataManager.getRoutineInfoById(Context ctx, int routineId, Time currentTime)==
   * This method computes:
     ** all bus stops for a specific bus routine (Currently support all loops), 
     ** and next arrival time for each bus stop after a specified time.
