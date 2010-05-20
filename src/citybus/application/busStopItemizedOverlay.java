@@ -57,7 +57,7 @@ public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	  ArrayList<BusNextComingInfo> info = DataManager.getNextComingBusInfoByLocation(//Date might be weird, check with Fan TODO
 				mContext, stopIdByName(item.getTitle()), new Time(now.get(Calendar.DAY_OF_WEEK), 
 						now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE)), 4);
-	  Log.d("citybus debug", now.get(Calendar.HOUR_OF_DAY)+":"+ now.get(Calendar.MINUTE));
+	  //Log.d("citybus debug", now.get(Calendar.HOUR_OF_DAY)+":"+ now.get(Calendar.MINUTE));
 	  for (BusNextComingInfo i : info) {
 		  if(!checkPreferences(i.routeId, prefs))//check if they put it in the preferences
 			  continue;

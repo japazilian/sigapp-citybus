@@ -46,9 +46,6 @@ public class citybus extends Activity implements OnClickListener {
 			Log.d("citybus", "bus ID=" + i.routeId + ",time="
 					+ i.geoTimeInfo.timeInfo.toString());
 		}
-		// Test AR button setup, TODO change once we have real GUI
-		//Button b = (Button) findViewById(R.id.btn_startar);
-		//b.setOnClickListener(this);
 		ImageButton vmbutton = (ImageButton)findViewById(R.id.ViewMapButton);
 	    vmbutton.setOnClickListener(this);
 	    ImageButton plbutton = (ImageButton)findViewById(R.id.PlanButton);
@@ -121,13 +118,16 @@ public class citybus extends Activity implements OnClickListener {
 				Intent i = new Intent(this, citybusMap.class);
 				startActivity(i);
 				break;
-			case R.id.PlanButton:
+			case R.id.PlanButton: 
+				/*
 				Builder warning = new AlertDialog.Builder(this); 
 				warning.setTitle("Warning"); 
 				warning.setIcon(R.drawable.cone); 
 				warning.setMessage("Not Implemented.");  
 				warning.setNegativeButton("back", null); 
-				warning.show(); 
+				warning.show(); */
+				Intent a = new Intent(this, LargeImageScroller.class);
+				startActivity(a);
 				break;
 			case R.id.PrefButton:
 				Intent list = new Intent(this, List2.class);
