@@ -15,18 +15,40 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
+import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import citybus.datamanager.BusNextComingInfo;
 import citybus.datamanager.DBConstants;
 import citybus.datamanager.DataManager;
 import citybus.datamanager.Time;
 
-public class citybus extends Activity implements OnClickListener {
+public class citybus extends Activity implements OnClickListener, OnTouchListener, OnScrollListener {
+	ImageView homeOp;
+	ScrollView menuScroll;
+	ImageView bgV;
+	ImageView labV;
+	
+	//Scroller scrl;
+	
+	ImageView vmbutton;
+    ImageView plbutton;
+    ImageView prbutton;
+    ImageView abbutton;
+	
+	float fy;
+	float ly;
+	int lab = 1;
+	
+	Animation push_anim;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,13 +68,24 @@ public class citybus extends Activity implements OnClickListener {
 			Log.d("citybus", "bus ID=" + i.routeId + ",time="
 					+ i.geoTimeInfo.timeInfo.toString());
 		}
-		ImageButton vmbutton = (ImageButton)findViewById(R.id.ViewMapButton);
+		
+		homeOp = (ImageView)findViewById(R.id.HomeOp);
+		menuScroll = (ScrollView)findViewById(R.id.ScrollView01);
+		menuScroll.setOnTouchListener(this);
+		//menuScroll.setSmoothScrollingEnabled(false);
+		bgV = (ImageView)findViewById(R.id.ImageViewBg);
+		labV = (ImageView)findViewById(R.id.ImageViewLab);
+		//scrl = (Scroller) findViewById(R.id.LinearLayout01);
+		
+		push_anim = AnimationUtils.loadAnimation(this, R.anim.click_shade);
+		
+		vmbutton = (ImageView)findViewById(R.id.ViewMapButton);
 	    vmbutton.setOnClickListener(this);
-	    ImageButton plbutton = (ImageButton)findViewById(R.id.PlanButton);
+	    plbutton = (ImageView)findViewById(R.id.PlanButton);
 	    plbutton.setOnClickListener(this);
-	    ImageButton prbutton = (ImageButton)findViewById(R.id.PrefButton);
+	    prbutton = (ImageView)findViewById(R.id.PrefButton);
 	    prbutton.setOnClickListener(this);
-	    ImageButton abbutton = (ImageButton)findViewById(R.id.AboutButton);
+	    abbutton = (ImageView)findViewById(R.id.AboutButton);
 	    abbutton.setOnClickListener(this);
 	}
 
@@ -110,6 +143,113 @@ public class citybus extends Activity implements OnClickListener {
 		return pois;
 	}
 
+	public void onScrollStateChanged(AbsListView view, int scrollState){
+		return;
+	}
+	
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		return;
+	}
+	
+	public boolean onTouch(View v, MotionEvent ev) {
+		if (ev.getAction() == 0x00000000) {
+			fy = ev.getRawY();
+		}
+		else if (ev.getAction() == 0x00000001) {
+			ly = ev.getRawY();
+			//menuScroll.abortAnimation();
+			//menuScroll.
+			
+			if(ly > fy) {
+				
+				bgV.setImageResource(R.drawable.mapuser);
+				if (lab == 1) {
+					//menuScroll.scrollTo(0, 360);
+					abbutton.startAnimation(push_anim);
+					lab = 5;
+					labV.setBackgroundResource(R.drawable.about_label);
+				}
+				else if (lab == 2) {
+					//menuScroll.scrollTo(0, 0);
+					homeOp.startAnimation(push_anim);
+					lab = 1;
+					labV.setBackgroundResource(R.drawable.home_label);
+				}
+				else if (lab == 3) {
+					//menuScroll.scrollTo(0, 90);
+					vmbutton.startAnimation(push_anim);
+					lab = 2;
+					labV.setBackgroundResource(R.drawable.map_label);
+				}
+				else if (lab == 4) {
+					//menuScroll.scrollTo(0, 180);
+					plbutton.startAnimation(push_anim);
+					lab = 3;
+					labV.setBackgroundResource(R.drawable.plan_label);
+				}
+				else if (lab == 5) {
+					//menuScroll.scrollTo(0, 270);
+					prbutton.startAnimation(push_anim);
+					lab = 4;
+					labV.setBackgroundResource(R.drawable.sche_label);
+				}
+			}
+			else if(ly < fy) {
+				
+				bgV.setImageResource(R.drawable.cell);
+				if (lab == 1) {
+					//menuScroll.scrollTo(0, 90);
+					vmbutton.startAnimation(push_anim);
+					lab = 2;
+					labV.setBackgroundResource(R.drawable.map_label);
+				}
+				else if (lab == 2) {
+					//menuScroll.scrollTo(0, 180);
+					plbutton.startAnimation(push_anim);
+					lab = 3;
+					labV.setBackgroundResource(R.drawable.plan_label);
+				}
+				else if (lab == 3) {
+					//menuScroll.scrollTo(0, 270);
+					prbutton.startAnimation(push_anim);
+					lab = 4;
+					labV.setBackgroundResource(R.drawable.sche_label);
+				}
+				else if (lab == 4) {
+					//menuScroll.scrollTo(0, 360);
+					abbutton.startAnimation(push_anim);
+					lab = 5;
+					labV.setBackgroundResource(R.drawable.about_label);
+				}
+				else if (lab == 5) {
+					//menuScroll.scrollTo(0, 0);
+					homeOp.startAnimation(push_anim);
+					lab = 1;
+					labV.setBackgroundResource(R.drawable.home_label);
+				}
+			}
+			
+			//focus		
+			if (lab == 1) {
+				menuScroll.scrollTo(0, 0);
+			}
+			else if (lab == 2) {
+				menuScroll.scrollTo(0, 90);
+			}
+			else if (lab == 3) {
+				menuScroll.scrollTo(0, 180);
+			}
+			else if (lab == 4) {
+				menuScroll.scrollTo(0, 270);
+			}
+			else if (lab == 5) {
+				menuScroll.scrollTo(0, 360);
+			}
+			
+		}
+		return false;
+	}
+	
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
