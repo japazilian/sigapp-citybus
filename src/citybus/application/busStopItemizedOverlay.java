@@ -47,15 +47,15 @@ public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	}
 	@Override
 	protected boolean onTap(int index) {
-	  OverlayItem item = mOverlays.get(index);
+	  final OverlayItem o_item = mOverlays.get(index);
 	  Calendar now = Calendar.getInstance();
-	  SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+	  final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 	  String message = "";
 	  int id = -1;
 	  boolean firstPrint = true;
 	  
-	  ArrayList<BusNextComingInfo> info = DataManager.getNextComingBusInfoByLocation(//Date might be weird, check with Fan TODO
-				mContext, stopIdByName(item.getTitle()), new Time(now.get(Calendar.DAY_OF_WEEK), 
+	  final ArrayList<BusNextComingInfo> info = DataManager.getNextComingBusInfoByLocation(//Date might be weird, check with Fan TODO
+				mContext, stopIdByName(o_item.getTitle()), new Time(now.get(Calendar.DAY_OF_WEEK), 
 						now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE)), 4);
 	  //Log.d("citybus debug", now.get(Calendar.HOUR_OF_DAY)+":"+ now.get(Calendar.MINUTE));
 	  for (BusNextComingInfo i : info) {
@@ -76,7 +76,7 @@ public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			  
 	  }
 	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-	  dialog.setTitle(item.getTitle());
+	  dialog.setTitle(o_item.getTitle());
 	  dialog.setMessage(message);
 	  dialog.setNegativeButton("Close", new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
@@ -85,8 +85,64 @@ public class busStopItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	  });
 	  dialog.setNeutralButton("More Detail", new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
-        	  Intent list = new Intent(mContext, List2.class);
-        	  mContext.startActivity(list);
+        	  //ArrayList <CharSequence> routes = new ArrayList<CharSequence>();
+        	  //CharSequence[] routes = new CharSequence[info.size()];
+        	  ArrayList<CharSequence> r = new ArrayList<CharSequence>();
+        	  ArrayList<BusNextComingInfo> r2 
+        	  	= (ArrayList<BusNextComingInfo>) info.clone();
+        	  for (BusNextComingInfo i : info) {
+        		  //check if they put it in the preferences
+        		  if(checkPreferences(i.routeId, prefs) &&
+        				  !r.contains(loopById(i.routeId))) {
+        			  /*if(index == 0) 
+            			  routes[index++] = i.geoTimeInfo.geoInfo.name;
+        			  else if(!routes[index-1].equals(i.geoTimeInfo.geoInfo.name))
+        				  routes[index++] = i.geoTimeInfo.geoInfo.name;
+        			  else
+        				  routes[index++] = "null";*/
+        			  r.add(loopById(i.routeId));
+        		  }
+        		  else
+        			  r2.remove(i);
+        	  }
+        	  
+        	  if(r.size() > 1) { 
+        		  //There are more than one routes checked, so they want more 
+        		  //detail but we have to find out which route they want to 
+        		  //look at
+	        	  AlertDialog.Builder dialog2 = new AlertDialog.Builder(mContext);
+	        	  dialog2.setTitle("For which route?");
+	        	  //dialog2.setMessage("test message");
+	        	  //can't refer to routes unless it's final, but can't declare
+	        	  //routes final because then we can't add to it, so declared
+	        	  //a new arraylist that's final that equals routes 
+	        	  final ArrayList<BusNextComingInfo> r2_final = r2;
+	        	  CharSequence[] routes = new CharSequence[r.size()];
+	        	  int i = 0; 
+	        	  for(CharSequence c : r) {
+	        		  routes[i] = r.get(i++); //TODO can't this just be  = c?
+	        	  }
+	        	  final CharSequence[] routes_final = routes;
+	        	  dialog2.setItems(routes_final, 
+	        			  new DialogInterface.OnClickListener() {
+	        		    public void onClick(DialogInterface dialog, int item) {
+	        		        CharSequence desiredName = routes_final[item];
+	        		        
+	        		        Intent list = new Intent(mContext, List2.class);
+	        		        list.putExtra("route", r2_final.get(item).routeId); //TODO i think this is the problem
+	        		        list.putExtra("stop", stopIdByName(o_item.getTitle()));
+	        	        	mContext.startActivity(list);
+	        		    }
+	        		});    	  
+	        	  dialog2.show();
+        	  }
+        	  else { //there is only one 
+  		        CharSequence desiredName = r.get(0); 
+  		        Intent list = new Intent(mContext, List2.class);
+  		        list.putExtra("route", r2.get(0).routeId);
+		        list.putExtra("stop", stopIdByName(o_item.getTitle()));
+  	        	mContext.startActivity(list);
+        	  }
          }
 	  });
 	  dialog.show();
